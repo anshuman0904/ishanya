@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_screen.dart';
 import 'education_screen.dart';
+import 'reports_screen.dart';
 import 'AttendanceHistoryScreen.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -676,6 +677,56 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+          SizedBox(height: 24),
+          // Programs section
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+            child: Text(
+              'Reports',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue.shade800,
+              ),
+            ),
+          ),
+          // Reports section
+          Card(
+            elevation: 1,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                final id = widget.userId;
+                print('Navigating to ReportsScreen with studentId: $id');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReportsScreen(studentId: id),
+                  ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.orange.shade100,
+                      child: Icon(Icons.insert_drive_file, color: Colors.orange.shade700),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        'View Reports',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                  ],
+                ),
+              ),
+            ),
+          ),
 
           SizedBox(height: 32),
         ],
