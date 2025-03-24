@@ -4,6 +4,8 @@
     <!-- ✅ Add POST_NOTIFICATIONS permission -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:label="Ishanya"
         android:name="${applicationName}"

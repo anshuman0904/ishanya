@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EducationScreen extends StatefulWidget {
   final String educatorId;
@@ -231,6 +232,30 @@ class _EducationScreenState extends State<EducationScreen> {
       ),
       margin: EdgeInsets.only(bottom: 8),
       child: ListTile(
+        onTap: () async {
+          if (subtitle.isEmpty) return;
+
+          Uri uri;
+
+          if (title.toLowerCase() == "phone") {
+            // Open WhatsApp chat with number
+            final whatsappNumber = subtitle.replaceAll(RegExp(r'\s+'), '');
+            uri = Uri.parse("https://wa.me/$whatsappNumber");
+          } else if (title.toLowerCase() == "email") {
+            // Compose email
+            uri = Uri(
+              scheme: 'mailto',
+              path: subtitle,
+            );
+          } else {
+            // Default to a normal web URL
+            uri = Uri.parse(subtitle);
+          }
+
+          if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+            throw Exception('Could not launch $uri');
+          }
+        },
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         leading: Container(
           padding: EdgeInsets.all(8),

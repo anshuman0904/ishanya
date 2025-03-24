@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/cupertino.dart';
+import 'programs_screen.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -539,6 +540,56 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(height: 24),
           ],
 
+          // Programs section
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+            child: Text(
+              'Programs',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue.shade800,
+              ),
+            ),
+          ),
+          Card(
+            elevation: 1,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                final id = widget.userId;
+                print('Navigating to ProgramsScreen with studentId: $id');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProgramsScreen(studentId: id),
+                  ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.purple.shade100,
+                      child: Icon(Icons.school, color: Colors.purple.shade700),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: Text(
+                        'View Student Programs',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 24),
+
           // Attendance section
           Padding(
             padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
@@ -639,21 +690,28 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.blue.shade700,
-        title:
-        // title: studentData != null
-        //     ? Text(
-        //   '${studentData!['Fname'] ?? ''} ${studentData!['Lname'] ?? ''}',
-        //   style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-        // )
-        //     :
-              Text('Student Information', style: TextStyle(color: Colors.white)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(16),
+          ),
+        ),
+        title: Text(
+          'Student Information',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            letterSpacing: 0.5,
+            color: Colors.white,
+          ),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.logout, color: Colors.white),
             onPressed: () => _logout(context),
-          )
+          ),
         ],
       ),
+
       body: Container(
         color: Colors.grey.shade50,
         child: isLoading

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AttendanceHistoryScreen extends StatefulWidget {
   final String? studentId;
@@ -64,9 +65,9 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
         foregroundColor: Colors.black87,
         title: Text(
           'Attendance History',
-          style: TextStyle(
+          style: GoogleFonts.poppins(
+            color: Colors.black87,
             fontWeight: FontWeight.w600,
-            fontSize: 20,
           ),
         ),
         actions: [
