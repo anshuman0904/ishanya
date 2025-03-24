@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "939708557568",
+    "project_id": "ishanya-2",
+    "storage_bucket": "ishanya-2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:939708557568:android:8a765e1af4e15a8c3e2be5",
+        "android_client_info": {
+          "package_name": "com.example.ishanya"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEiFP9o7Ri-Zq3EuiyU1qk2ZM3RkZ5asA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,6 +4,9 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_screen.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 class HomeScreen extends StatefulWidget {
   final String userId;
 
@@ -18,11 +21,77 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = true;
   String? error;
 
+  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+
   @override
   void initState() {
     super.initState();
     fetchStudentInfo();
+    initFCM();
   }
+
+  Future<void> initFCM() async {
+    // Request permissions
+    NotificationSettings settings = await _messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    // Get and send token
+    final fcmToken = await _messaging.getToken();
+    print("🔑 FCM Token: $fcmToken");
+
+    if (fcmToken != null) {
+      final response = await http.post(
+        Uri.parse('https://team7.pythonanywhere.com/save-token'),
+        body: {
+          'student_id': widget.userId,
+          'token': fcmToken,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print("✅ Token successfully sent to backend!");
+      } else {
+        print("❌ Failed to send token: ${response.statusCode} - ${response.body}");
+      }
+    }
+
+    // Init local notifications
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+    const InitializationSettings initializationSettings =
+    InitializationSettings(android: initializationSettingsAndroid);
+
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    // Foreground message listener
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('📨 Foreground message: ${message.notification?.title}');
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'high_importance_channel',
+              'Ishanya Notifications',
+              importance: Importance.max,
+              priority: Priority.high,
+            ),
+          ),
+        );
+      }
+    });
+  }
+
 
   Future<void> fetchStudentInfo() async {
     const String apiUrl = 'https://team7.pythonanywhere.com/get_student_by_id';
@@ -100,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ListView(
         children: fieldOrder.map((key) {
           final value = studentData![key];
-          if (value == null) return SizedBox.shrink(); // skip nulls
+          if (value == null) return SizedBox.shrink();
 
           if (key == 'Photo') {
             return Card(
@@ -109,7 +178,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(height: 8),
                   Text('Photo', style: TextStyle(fontWeight: FontWeight.bold)),
                   SizedBox(height: 8),
-                  Image.network(value, height: 150, errorBuilder: (_, __, ___) => Icon(Icons.error)),
+                  Image.network(value, height: 150,
+                      errorBuilder: (_, __, ___) => Icon(Icons.error)),
                   SizedBox(height: 8),
                 ],
               ),
@@ -126,7 +196,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +215,6 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : error != null
