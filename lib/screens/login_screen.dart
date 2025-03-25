@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -64,6 +65,28 @@ class _LoginScreenState extends State<LoginScreen> {
           await prefs.setString('userId', id);
           await prefs.setInt('userType', 0);
 
+          // Fetch and send FCM token
+          final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+          final fcmToken = await _messaging.getToken();
+          print("🔑 FCM Token: $fcmToken");
+
+          if (fcmToken != null) {
+            final tokenResponse = await http.post(
+              Uri.parse('https://team7.pythonanywhere.com/save-token'),
+              body: {
+                'student_id': id,
+                'token': fcmToken,
+              },
+            );
+
+            if (tokenResponse.statusCode == 200) {
+              print("✅ Token successfully sent to backend!");
+            } else {
+              print("❌ Failed to send token: ${tokenResponse.statusCode} - ${tokenResponse.body}");
+            }
+          }
+
+          // Navigate to HomeScreen after successfully sending the token
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => HomeScreen(userId: id)),
@@ -84,6 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     }
   }
+
 
   @override
   void dispose() {

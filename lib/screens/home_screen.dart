@@ -48,25 +48,25 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     // Get and send token
-    final fcmToken = await _messaging.getToken();
-    print("🔑 FCM Token: $fcmToken");
-
-    if (fcmToken != null) {
-      final response = await http.post(
-        Uri.parse('https://team7.pythonanywhere.com/save-token'),
-        body: {
-          'student_id': widget.userId,
-          'token': fcmToken,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        print("✅ Token successfully sent to backend!");
-      } else {
-        print("❌ Failed to send token: ${response.statusCode} - ${response
-            .body}");
-      }
-    }
+    // final fcmToken = await _messaging.getToken();
+    // print("🔑 FCM Token: $fcmToken");
+    //
+    // if (fcmToken != null) {
+    //   final response = await http.post(
+    //     Uri.parse('https://team7.pythonanywhere.com/save-token'),
+    //     body: {
+    //       'student_id': widget.userId,
+    //       'token': fcmToken,
+    //     },
+    //   );
+    //
+    //   if (response.statusCode == 200) {
+    //     print("✅ Token successfully sent to backend!");
+    //   } else {
+    //     print("❌ Failed to send token: ${response.statusCode} - ${response
+    //         .body}");
+    //   }
+    // }
 
     // Init local notifications
     const AndroidInitializationSettings initializationSettingsAndroid =
