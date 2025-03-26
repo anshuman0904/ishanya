@@ -49,4 +49,7 @@
     ```
 
 ## 📽 Demo Video
-[![Ishanya App Demo](https://img.youtube.com/vi/s9_QIaiPKGE/0.jpg)](https://www.youtube.com/watch?v=s9_QIaiPKGE)  
+[![Ishanya App Demo](https://img.youtube.com/vi/s9_QIaiPKGE/0.jpg)](https://www.youtube.com/watch?v=s9_QIaiPKGE)
+
+## 📥 Download APK
+[Download the application](https://github.com/anshuman0904/ishanya/blob/main/release/app-release.apk)
